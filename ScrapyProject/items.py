@@ -10,8 +10,17 @@ import scrapy
 
 class ScrapyItem(scrapy.Item):
 	
+    # Source website or magazine
 	source = scrapy.Field()
+    # Date of the article
 	date = scrapy.Field()
+    # Title
 	title = scrapy.Field()
+    # Synopsis
 	brief = scrapy.Field()
+    # Link to the article
 	url = scrapy.Field()
+    # Main author
+    author = scrapy.Field()
+    # Time of the extraction
+    tstamp = scrapy.Field()
