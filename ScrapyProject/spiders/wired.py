@@ -3,7 +3,7 @@
 # Please refer to the documentation for information on how to create and manage
 # your spiders.
 
-
+import datetime
 import scrapy
 from ScrapyProject.items import ScrapyItem
 
@@ -31,6 +31,12 @@ class NewsSpider(scrapy.Spider):
 			item['brief'] = entry.css('a').css('p.archive-item-component__desc::text').extract_first()
 			item['url'] = entry.css('a::attr(href)').extract_first()
 			item['title'] = entry.css('a').css('h2::text').extract_first()
+			
+
+			# check time
+			now = datetime.datetime.now()
+			item['tstamp'] = now
+		
 
 		   # item['date'] = entry.css('time::text').extract_first()
 		   # item['brief'] = entry.css('p.post-excerpt::text').extract_first()
