@@ -3,9 +3,12 @@
 # Please refer to the documentation for information on how to create and manage
 # your spiders.
 
+import timestring
 import datetime
 import scrapy
 from ScrapyProject.items import ScrapyItem
+import pytz
+import dateutil.parser
 
 class EsaSpider(scrapy.Spider):
 	#item_id = ScrapyItem()
@@ -29,7 +32,7 @@ class EsaSpider(scrapy.Spider):
 			item = ScrapyItem()
 
 			item['source'] = 'esa'
-			item['date'] = briefs[j].css('::text').extract_first()
+			temp_string = briefs[j].css('::text').extract_first()
 			if briefs[j].css('b::text').extract_first()!='...':
 				continue
 			item['brief'] = briefs[j].css('::text').extract()[1]
@@ -38,6 +41,11 @@ class EsaSpider(scrapy.Spider):
 
 			# check time
 			now = datetime.datetime.now()
+			now  = now.strftime("%Y-%m-%dT%H:%M:%S.%f%z")
 			item['tstamp'] = now
+
+			# transfer time into ISO 8601
+			temp = timestring.Date(temp_string).date
+			item['date']  = temp.strftime("%Y-%m-%dT%H:%M:%S.%f%z")
 
 			yield item
