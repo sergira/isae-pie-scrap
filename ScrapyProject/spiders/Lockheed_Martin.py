@@ -9,6 +9,7 @@ import scrapy
 from ScrapyProject.items import ScrapyItem
 import pytz
 import dateutil.parser
+import numpy as np
 
 class NewsSpider(scrapy.Spider):
 
@@ -17,7 +18,7 @@ class NewsSpider(scrapy.Spider):
 	allowed_domains = ['https://news.lockheedmartin.com']
 
 	
-	start_urls = [('https://news.lockheedmartin.com/news-releases?o=%d' %i*5) for i in range(20)]
+	start_urls = [('https://news.lockheedmartin.com/news-releases?advanced=1&keywords=rocket&start=2008-01-01&end=2018-02-06&have_asset_types=1&l=100&0=%d' % (i*100)) for i in range(0,8)]
 
 	def parse(self, response):
 	# iterate entries
