@@ -14,6 +14,8 @@ class ScrapyItem(scrapy.Item):
 	source = scrapy.Field()
     # Date of the article
 	date = scrapy.Field()
+    # Body of the article
+    body = scrapy.Field()
     # Title
 	title = scrapy.Field()
     # Synopsis
