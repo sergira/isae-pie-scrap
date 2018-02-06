@@ -13,39 +13,69 @@ import dateutil.parser
 class EsaSpider(scrapy.Spider):
 	#item_id = ScrapyItem()
 	name = 'esa'
+	allowed_domains = ['www.esa.int']
 
-
-	allowed_domains = ['http://www.esa.int']
-
-	start_urls = [('http://www.esa.int/esasearch?q=propulsion&start=%d' % (i*10+1)) for i in range(0,50)]
+	start_urls = ['http://www.esa.int/For_Media/%28archive%29/0']
 
 	def parse(self, response):
 
-		news = response.css('div.sr')
-		titles = news.css('h4')
-		briefs = news.css('p')
-		# iterate entries
-		for j in range(len(titles)):
+		for entry in response.css('#archt').css('tr'):
 
-
-            #retrieve info for our current post
+			# Declare the container item
 			item = ScrapyItem()
-
 			item['source'] = 'esa'
-			temp_string = briefs[j].css('::text').extract_first()
-			if briefs[j].css('b::text').extract_first()!='...':
-				continue
-			item['brief'] = briefs[j].css('::text').extract()[1]
-			item['url'] = titles[j].css('a::attr(href)').extract_first()
-			item['title'] = titles[j].css('a::text').extract_first()
 
-			# check time
+			# Extract the date			
+			tds = entry.css('td')
+			temp_string =  tds[1].css('::text').extract_first()
+			temp_string += ' ' + tds[0].css('::text').extract_first()
+			temp_string += ' ' + tds[2].css('::text').extract_first()
+			# transfer time into ISO 8601
+			temp = timestring.Date(temp_string).date
+			item['date'] = temp.strftime("%Y-%m-%dT%H:%M:%S.%f%z")
+
+			# Extract the title
+			item['title'] = tds[3].css('a::text').extract_first()
+
+			# Extract the URL
+			item['url'] = 'http://www.esa.int' + tds[3].css('a::attr(href)').extract_first()
+
+			# Save current time
 			now = datetime.datetime.now()
 			now  = now.strftime("%Y-%m-%dT%H:%M:%S.%f%z")
 			item['tstamp'] = now
 
-			# transfer time into ISO 8601
-			temp = timestring.Date(temp_string).date
-			item['date']  = temp.strftime("%Y-%m-%dT%H:%M:%S.%f%z")
+			# Proceed to retrieve the body and the abstract
+			request = scrapy.Request(item['url'], callback=self.parse_body_brief)
+			request.meta['item'] = item
+			yield request
 
-			yield item
+		# Go to next page if possible
+		nextpage_url = response.css('a[title="Next Page"]::attr(href)').extract_first()
+		print('\n\n'+ nextpage_url+ '\n\n')
+		if nextpage_url:
+			yield scrapy.Request('http://www.esa.int' + nextpage_url)
+
+	def parse_body_brief(self, response):
+		item = response.meta['item']
+
+		# No brief in esa.int so we will put the first paragraph
+		item['brief'] = response.css('div.section')[0].css('p::text').extract_first()
+		item['brief'] = ' '.join(item['brief'].split()) # Clean the text
+
+		# Extract body
+		item['body'] = ''
+		for section in response.css('div.section'):
+			for paragraph in section.css('p'):
+				part_body = paragraph.css('::text').extract_first()
+				part_body = ' '.join(part_body.split()) # Clean the text
+				item['body'] += ' ' + part_body
+
+		# Extract the date			
+#		temp_string = response.css('span.art_date::text').extract_first()
+		# transfer time into ISO 8601
+#		temp = timestring.Date(temp_string+' 12:00').date
+#		item['date'] = temp.strftime("%Y-%m-%dT%H:%M:%S.%f%z")
+
+		# Item done, send to pipeline
+		yield item
