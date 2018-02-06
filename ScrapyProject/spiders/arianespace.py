@@ -12,7 +12,8 @@ class NewsSpider(scrapy.Spider):
 
 	allowed_domains = ['www.arianespace.com']
 
-	start_urls = ['http://www.arianespace.com/press-releases/page/1/']
+	start_urls = ['http://www.arianespace.com/press-releases/',
+                  'http://www.arianespace.com/corporate-news/']
 
 	def parse(self, response):
         # iterate entries
@@ -25,6 +26,7 @@ class NewsSpider(scrapy.Spider):
 			temp_string  = entry.css('span.list-article__date::text').extract_first()
 			item['url'] = entry.css('a.list-article__title::attr(href)').extract_first()
 			item['title'] = entry.css('a.list-article__title::text').extract_first()
+			item['title'] = ' '.join(item['title'].split()) #Extract \t\n symbols and alike
 
 			# get current time
 			now = datetime.datetime.now()
@@ -43,13 +45,15 @@ class NewsSpider(scrapy.Spider):
 
 		paginate = response.css('div.paginate').css('a')
 		for paginate_link in paginate:			
-			yield scrapy.Request(paginate_link.css('::attr(href)').extract_first())
+			if paginate_link.css('button.paginate__button--right'):
+				yield scrapy.Request(paginate_link.css('::attr(href)').extract_first())
        
 
 	def get_brief_body(self, response):
 		item = response.meta['item']
 		item['brief'] = response.css('p.article-wrapper__chapo::text').extract_first()
-		item['body'] = ''
-		for paragraph in response.css('div.rte').css('p'):
+		item['brief'] = ' '.join(item['brief'].split()) #Extract /t/n symbols and alike
+		item['body'] = ''		
+		for paragraph in response.css('div.rte').css('p, h1, h2'):
 			item['body'] += paragraph.css('::text').extract_first()
 		yield item
