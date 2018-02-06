@@ -3,9 +3,12 @@
 # Please refer to the documentation for information on how to create and manage
 # your spiders.
 
+import timestring
 import datetime
 import scrapy
 from ScrapyProject.items import ScrapyItem
+import pytz
+import dateutil.parser
 import numpy as np
 
 class NewsSpider(scrapy.Spider):
@@ -32,8 +35,19 @@ class NewsSpider(scrapy.Spider):
 					np.put(NewsSpider.url_list, [i], entry.css('a::attr(href)').extract_first())
 					#url_list = np.append(entry.css('a::attr(href)').extract_first())
 					url_temp = entry.css('a::attr(href)').extract_first()		
-					item['source'] = '111'	
-					item['url'] = NewsSpider.url_list.item(i)	
+					item['source'] = 'wired'	
+					temp_string = entry.css('time::text').extract_first()
+					item['brief'] = entry.css('a').css('p.archive-item-component__desc::text').extract_first()
+					item['url'] = entry.css('a::attr(href)').extract_first()
+					item['title'] = entry.css('a').css('h2::text').extract_first()
+					# check time
+					now = datetime.datetime.now()
+					now  = now.strftime("%Y-%m-%dT%H:%M:%S.%f%z")
+					item['tstamp'] = now
+					# transfer time into ISO 8601
+					temp = timestring.Date(temp_string).date
+					item['date']  = temp.strftime("%Y-%m-%dT%H:%M:%S.%f%z")
+	
 					i = i+1
 
 					yield item
