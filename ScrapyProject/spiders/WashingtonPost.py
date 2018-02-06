@@ -14,7 +14,7 @@ class WashingtonPostSpider(scrapy.Spider):
 
 	allowed_domains = ['https://www.washingtonpost.com/']
 
-	start_urls = [('https://www.washingtonpost.com/newssearch/?query=space%20propulsion&utm_term=.2b4058aeca71&sort=Date&datefilter=All%20Since%202005&startat=%d&spellcheck#top' % (i*20)) for i in range (0,10)]
+	start_urls = [('https://www.washingtonpost.com/newssearch/?query=space propulsion&utm_term=.2b4058aeca71&sort=Date&datefilter=All Since 2005&startat=%d&spellcheck#top' % (i*20)) for i in range (0,10)]
 	
 	def parse(self, response):
         #iterate entries
