@@ -45,17 +45,16 @@ class NewsSpider(scrapy.Spider):
 			item['date']  = temp.strftime("%Y-%m-%dT%H:%M:%S.%f%z")
 
 			# request to article page
-			next_page = response.urljoin(item['url'])
-			request = scrapy.Request(next_page, callback=self.parse_article)
+			request = scrapy.Request(item['url'], callback=self.parse_article)
 			request.meta['item'] = item
 
 			yield request
 
 		NewsSpider.i = NewsSpider.i+1
-		next_search_url = 'http://spacenews.com/?s=propulsion&orderby=date-desc&paged=%d' % NewsSpider.i	
-		next_search_page = response.urljoin(next_search_url)
+		
+		next_search_url = response.css('div').css('main').css('p').css('a::attr(href)').extract_first()
 				
-		yield scrapy.Request(next_search_page, callback=self.parse)
+		yield scrapy.Request(next_search_url, callback=self.parse)
 
 	def parse_article(self, response):
 			
