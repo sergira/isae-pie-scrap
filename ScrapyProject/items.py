@@ -18,9 +18,15 @@ class ScrapyItem(scrapy.Item):
 	title = scrapy.Field()
     # Synopsis
 	brief = scrapy.Field()
+	# Body
+	body = scrapy.Field()
     # Link to the article
 	url = scrapy.Field()
     # Main author
 	author = scrapy.Field()
     # Time of the extraction
 	tstamp = scrapy.Field()
+    # Tag
+	tags = scrapy.Field()
+    # Company
+	company = scrapy.Field()
