@@ -71,11 +71,5 @@ class EsaSpider(scrapy.Spider):
 				part_body = ' '.join(part_body.split()) # Clean the text
 				item['body'] += ' ' + part_body
 
-		# Extract the date			
-#		temp_string = response.css('span.art_date::text').extract_first()
-		# transfer time into ISO 8601
-#		temp = timestring.Date(temp_string+' 12:00').date
-#		item['date'] = temp.strftime("%Y-%m-%dT%H:%M:%S.%f%z")
-
 		# Item done, send to pipeline
 		yield item
