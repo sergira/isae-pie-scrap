@@ -65,11 +65,23 @@ ROBOTSTXT_OBEY = False
 
 # Configure item pipelines
 # See http://scrapy.readthedocs.org/en/latest/topics/item-pipeline.html
+
+
 ITEM_PIPELINES = {
-    'ScrapyProject.pipelines.MongoPipeline': 300,
+#    'ScrapyProject.pipelines.MongoPipeline': 300, # Uncomment for MongoDB
+    'ScrapyProject.pipelines.PostgresPipeline': 300, # Uncomment for PostGres
 }
-MONGO_URI = 'mongodb://localhost:27017'
-MONGO_DATABASE = 'PIE71'
+#MONGO_URI = 'mongodb://localhost:27017' # Uncomment for MongoDB
+#MONGO_DATABASE = 'PIE71'# Uncomment for MongoDB
+
+DATABASE = { # Uncomment for PostGres
+    'drivername': 'postgres',
+    'host': 'localhost',
+    'port': '5432',
+    'username': 'pie71',
+    'password': 'airbus',
+    'database': 'pie71'
+}
 
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See http://doc.scrapy.org/en/latest/topics/autothrottle.html

@@ -22,7 +22,5 @@ class ScrapyItem(scrapy.Item):
 	brief = scrapy.Field()
     # Link to the article
 	url = scrapy.Field()
-    # Main author
-	author = scrapy.Field()
     # Time of the extraction
 	tstamp = scrapy.Field()
