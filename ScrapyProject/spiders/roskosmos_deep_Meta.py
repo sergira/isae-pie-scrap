@@ -11,6 +11,7 @@ import pytz
 import dateutil.parser
 import re
 
+
 class NewsSpider(scrapy.Spider):
 
 
@@ -23,9 +24,10 @@ class NewsSpider(scrapy.Spider):
 	urls_list = []
 	temp = False
 
+		
 	def parse(self, response):
 	# iterate entries
-		
+
 		for entry in response.css('div.newslist'):
 	
 			#retrieve info for our current post
@@ -75,22 +77,23 @@ class NewsSpider(scrapy.Spider):
 		item = response.meta['item']
 		temp_string = ''
 
-		if not string:
-			return # ignore if no text body
+		#if not string:
+		#	return # ignore if no text body
 
 		for string in string_list:
 			temp_string = temp_string + u' '.join(string.split())
 		item['body'] = temp_string
-		return item
+
 
 
 	def parse_article_after2015(self, response):
+
 		string_list = response.css('div.content').css('p::text').extract()
 		item = response.meta['item']
 		temp_string = ''
 
-		if not string:
-			return # ignore if no text body
+		#if not string:
+		#	return # ignore if no text body
 
 		for string in string_list:
 			temp_string = temp_string + u' '.join(string.split())
