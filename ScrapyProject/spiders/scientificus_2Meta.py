@@ -1,3 +1,4 @@
+
 # This package will contain the spiders of your Scrapy project
 #
 # Please refer to the documentation for information on how to create and manage
@@ -50,7 +51,7 @@ class NewsSpider(scrapy.Spider):
             string = response.css('article').css('div').css('p::text').extract()
 
             item = response.meta['item']
-            item['article'] = string
+            item['body'] = string
             return item
 
 
