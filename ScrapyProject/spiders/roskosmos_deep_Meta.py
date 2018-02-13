@@ -11,7 +11,6 @@ import pytz
 import dateutil.parser
 import re
 
-
 class NewsSpider(scrapy.Spider):
 
 
@@ -27,11 +26,6 @@ class NewsSpider(scrapy.Spider):
 	def parse(self, response):
 	# iterate entries
 		
-
-
-	def parse(self, response):
-	# iterate entries
-
 		for entry in response.css('div.newslist'):
 	
 			#retrieve info for our current post
@@ -65,7 +59,6 @@ class NewsSpider(scrapy.Spider):
 
 			yield request
 
-
 		if NewsSpider.temp == False:
 			NewsSpider.urls_list = response.css('div.text').css('a::attr(href)').extract()
 			NewsSpider.temp = True
@@ -88,19 +81,6 @@ class NewsSpider(scrapy.Spider):
 		for string in string_list:
 			temp_string = temp_string + u' '.join(string.split())
 		item['body'] = temp_string
-
-		
-		NewsSpider.urls_list = response.css('div.text').css('a::attr(href)').extract()
-		for url in NewsSpider.urls_list:
-			next_search_page = response.urljoin(url)
-			yield scrapy.Request(next_search_page, callback=self.parse)
-
-
-	def parse_article_before2015(self, response):
-		string = response.css('div').css('div.abz::text').extract()
-		item = response.meta['item']
-		item['article'] = string
-
 		return item
 
 
@@ -117,8 +97,6 @@ class NewsSpider(scrapy.Spider):
 		item['body'] = temp_string
 		return item
 
-		string = response.css('div.content').css('p::text').extract()
-		item = response.meta['item']
-		item['article'] = string
-		return item
+
+
 
