@@ -9,10 +9,8 @@ import scrapy
 from ScrapyProject.items import ScrapyItem
 import pytz
 import dateutil.parser
-<<<<<<< HEAD
 import re
-=======
->>>>>>> ab7cf1330967996808a5f5ccb303fd331016fac1
+
 
 class NewsSpider(scrapy.Spider):
 
@@ -24,17 +22,16 @@ class NewsSpider(scrapy.Spider):
 	#start_urls = [('http://en.roscosmos.ru/102/2017%s/' %i[0]) for i in zip(["01","02","03","04","05","06","07","08","09","10","11","12"])]
 	start_urls = ['http://en.roscosmos.ru/102/201701/']
 	urls_list = []
-<<<<<<< HEAD
 	temp = False
 
 	def parse(self, response):
 	# iterate entries
 		
-=======
+
 
 	def parse(self, response):
 	# iterate entries
->>>>>>> ab7cf1330967996808a5f5ccb303fd331016fac1
+
 		for entry in response.css('div.newslist'):
 	
 			#retrieve info for our current post
@@ -68,7 +65,7 @@ class NewsSpider(scrapy.Spider):
 
 			yield request
 
-<<<<<<< HEAD
+
 		if NewsSpider.temp == False:
 			NewsSpider.urls_list = response.css('div.text').css('a::attr(href)').extract()
 			NewsSpider.temp = True
@@ -91,7 +88,7 @@ class NewsSpider(scrapy.Spider):
 		for string in string_list:
 			temp_string = temp_string + u' '.join(string.split())
 		item['body'] = temp_string
-=======
+
 		
 		NewsSpider.urls_list = response.css('div.text').css('a::attr(href)').extract()
 		for url in NewsSpider.urls_list:
@@ -103,12 +100,11 @@ class NewsSpider(scrapy.Spider):
 		string = response.css('div').css('div.abz::text').extract()
 		item = response.meta['item']
 		item['article'] = string
->>>>>>> ab7cf1330967996808a5f5ccb303fd331016fac1
+
 		return item
 
 
 	def parse_article_after2015(self, response):
-<<<<<<< HEAD
 		string_list = response.css('div.content').css('p::text').extract()
 		item = response.meta['item']
 		temp_string = ''
@@ -121,13 +117,8 @@ class NewsSpider(scrapy.Spider):
 		item['body'] = temp_string
 		return item
 
-
-
-
-=======
 		string = response.css('div.content').css('p::text').extract()
 		item = response.meta['item']
 		item['article'] = string
 		return item
 
->>>>>>> ab7cf1330967996808a5f5ccb303fd331016fac1
