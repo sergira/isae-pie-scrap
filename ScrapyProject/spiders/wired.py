@@ -9,7 +9,7 @@ import re
 
 class NewsSpider(scrapy.Spider):
 
-	name = 'wired2'
+	name = 'wired'
 	allowed_domains = ['wired.com']
 
 	start_urls = ['https://www.wired.com/search/?page=1&q=rocket&size=10&sort=publishDate_tdt%20desc&types=article']

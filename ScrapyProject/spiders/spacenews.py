@@ -9,7 +9,7 @@ import dateutil.parser
 
 class NewsSpider(scrapy.Spider):
 
-	name = 'spacenews2'
+	name = 'spacenews'
 
 
 	allowed_domains = ['spacenews.com']

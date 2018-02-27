@@ -24,6 +24,7 @@ class ThalesSpider(scrapy.Spider):
 			item = ScrapyItem()
 
 			item['source'] = 'thales'
+			item['company'] = 'thales'
 			item['brief'] = entry.css('span.description').css('div.even::text').extract_first()
 			item['url'] = 'https://www.thalesgroup.com'+ entry.css('h5').css('a::attr(href)').extract_first()
 			item['title'] = entry.css('h5').css('a::text').extract_first()

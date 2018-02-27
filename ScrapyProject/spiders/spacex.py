@@ -19,6 +19,7 @@ class EsaSpider(scrapy.Spider):
 			# Declare the container item
 			item = ScrapyItem()
 			item['source'] = 'spacex'
+			item['company'] = 'spacex'
 
 			# Extract the date			
 			temp_string = entry.css('div.date::text').extract_first()
