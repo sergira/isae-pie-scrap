@@ -17,7 +17,7 @@ class NewsSpider(scrapy.Spider):
 
 
 	name = 'lockheedmartin'
-	allowed_domains = ['news.lockheedmartin.com']
+	allowed_domains = ['lockheedmartin.com']
 
 	
 	start_urls = ['https://news.lockheedmartin.com/news-releases?advanced=1&have_asset_types=1&l=1000&0=0&end=2018-02-06']
@@ -33,7 +33,8 @@ class NewsSpider(scrapy.Spider):
 			# retrieve info for our current post
 			item = ScrapyItem()
 		
-			item['source'] = 'Lockheed Martin'
+			item['source'] = 'lockheedmartin'
+			item['company'] = 'lockheedmartin'
 
 			# retrieve time string
 			temp_string = entry.css('div.wd_date::text').extract_first()
@@ -57,7 +58,7 @@ class NewsSpider(scrapy.Spider):
 
 			request = scrapy.Request(item['url'], self.parse_body)
 			request.meta['item'] = item
-#			yield request
+			yield request
 
 		if len(response.css('li.wd_item')) == 1000:
 			# This website limits the articles shown articles to 1000; redo the request changing the 'end' date if the count reaches 1000

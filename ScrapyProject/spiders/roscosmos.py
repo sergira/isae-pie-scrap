@@ -15,11 +15,10 @@ import re
 class NewsSpider(scrapy.Spider):
 
 
-	name = 'roscosmos_deep_meta'
+	name = 'roscosmos'
 	allowed_domains = ['en.roscosmos.ru']
 
 	
-	#start_urls = [('http://en.roscosmos.ru/102/2017%s/' %i[0]) for i in zip(["01","02","03","04","05","06","07","08","09","10","11","12"])]
 	start_urls = ['http://en.roscosmos.ru/102/201701/']
 	urls_list = []
 	temp = False
@@ -35,6 +34,7 @@ class NewsSpider(scrapy.Spider):
 		
 					
 			item['source'] = 'roscosmos'
+			item['company'] = 'roscosmos'
 			temp_string = entry.css('div.date::text').extract_first()
 			item['brief'] = 'none'
 			item['url'] = entry.css('a::attr(href)').extract_first()
@@ -87,18 +87,24 @@ class NewsSpider(scrapy.Spider):
 
 
 	def parse_article_after2015(self, response):
-
-		string_list = response.css('div.content').css('p::text').extract()
 		item = response.meta['item']
 		temp_string = ''
 
-		#if not string:
-		#	return # ignore if no text body
+		string_list = response.css('div.content').css('p::text').extract()
+		if string_list:
+			for string in string_list:
+				temp_string = temp_string + u' '.join(string.split())
+			item['body'] = temp_string
+			return item
 
-		for string in string_list:
-			temp_string = temp_string + u' '.join(string.split())
-		item['body'] = temp_string
-		return item
+		# If nothing found, try with the alternative style 'blockgray'
+		string_list = response.css('div.content').css('div.blockgray::text').extract()
+		if string_list:
+			for string in string_list:
+				temp_string = temp_string + u' '.join(string.split())
+			item['body'] = temp_string
+			return item
+
 
 
 

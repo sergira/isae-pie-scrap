@@ -25,6 +25,7 @@ class EsaSpider(scrapy.Spider):
 			# Declare the container item
 			item = ScrapyItem()
 			item['source'] = 'esa'
+			item['company'] = 'esa'
 
 			# Extract the date			
 			tds = entry.css('td')

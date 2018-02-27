@@ -24,6 +24,7 @@ class NewsSpider(scrapy.Spider):
 			item = ScrapyItem()
 
 			item['source'] = 'arianespace'
+			item['company'] = 'arianespace'
 			temp_string  = entry.css('span.list-article__date::text').extract_first()
 			item['url'] = entry.css('a.list-article__title::attr(href)').extract_first()
 			item['title'] = entry.css('a.list-article__title::text').extract_first()
