@@ -77,18 +77,18 @@ ITEM_PIPELINES = {
 
 DATABASE = { # Uncomment for PostGres
     'drivername': 'postgres',
-    'host': 'localhost',
+    'host': '104.155.62.46',
     'port': '5432',
-    'username': 'pie71',
-    'password': 'airbus',
-    'database': 'pie71'
+    'username': 'postgres',
+    'password': 'Supaero-PIE', #TODO Retrieve from environment
+    'database': 'postgres'
 }
 
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See http://doc.scrapy.org/en/latest/topics/autothrottle.html
 #AUTOTHROTTLE_ENABLED = True
-# The initial download delay
 #AUTOTHROTTLE_START_DELAY = 5
+# The initial download delay
 # The maximum download delay to be set in case of high latencies
 #AUTOTHROTTLE_MAX_DELAY = 60
 # The average number of requests Scrapy should be sending in parallel to
