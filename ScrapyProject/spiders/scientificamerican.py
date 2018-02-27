@@ -42,6 +42,11 @@ class NewsSpider(scrapy.Spider):
             yield request
 
 
+        paginate = response.css('div.pagination__right')
+        if paginate.css('a'):
+            next_link = 'https://www.scientificamerican.com/search/' + paginate.css('a::attr(href)').extract_first()
+            yield scrapy.Request(next_link)
+
 
     def parse_article(self, response):
             item = response.meta['item']
