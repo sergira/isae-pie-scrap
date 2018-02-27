@@ -11,22 +11,22 @@ import pymongo
 
 # Imports for Postgres
 from sqlalchemy.orm import sessionmaker
-from ScrapyProject.models import Deals, db_connect, create_deals_table
+from ScrapyProject.models import NewsArticles, db_connect, create_table
 
 class PostgresPipeline(object):
 
     def __init__(self):
         engine = db_connect()
-        create_deals_table(engine)
+        create_table(engine)
         self.Session = sessionmaker(bind=engine)
 
     def process_item(self, item, spider):
 
         session = self.Session()
-        deal = Deals(**item)
+        article = NewsArticles(**item)
 
         try:
-            session.add(deal)
+            session.add(article)
             session.commit()
         except:
             session.rollback()

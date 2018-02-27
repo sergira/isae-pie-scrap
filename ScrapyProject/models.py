@@ -17,14 +17,13 @@ def db_connect():
     return create_engine(URL(**ScrapyProject.settings.DATABASE))
 
 
-def create_deals_table(engine):
-    """"""
+def create_table(engine):
     DeclarativeBase.metadata.create_all(engine)
 
 
-class Deals(DeclarativeBase):
+class NewsArticles(DeclarativeBase):
     """Sqlalchemy newsarticles model"""
-    __tablename__ = "newsarticles"
+    __tablename__ = "db_api_newsarticle"
     
     tstamp = Column('tstamp', DateTime, nullable=False) 
     url = Column('url', String, primary_key=True)
@@ -32,6 +31,6 @@ class Deals(DeclarativeBase):
     brief = Column('brief', String, nullable=True)
     body = Column('body', String, nullable=True)
     date = Column('date', DateTime, nullable=False)
-    source = Column('source', String, nullable=False, default='undefined')
-    company = Column('company', String, nullable=False, default='undefined')
+    source = Column('source', String, nullable=False, default='UNDEFINED')
+    company = Column('company', String, nullable=False, default='UNDEFINED')
     tag = Column('tag', String, nullable=True)
