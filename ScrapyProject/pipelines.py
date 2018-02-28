@@ -9,6 +9,8 @@
 import logging
 import pymongo
 
+import random
+
 # Imports for Postgres
 from sqlalchemy.orm import sessionmaker
 from ScrapyProject.models import NewsArticles, db_connect, create_table
@@ -23,6 +25,15 @@ class PostgresPipeline(object):
     def process_item(self, item, spider):
 
         session = self.Session()
+
+        #insert a random Tag
+        item['tag'] = random.choice([
+            'plasma', 'plasma',
+            'SSTO',
+            'liquid',
+            'solid', 'solid', 'solid'
+            ])
+
         article = NewsArticles(**item)
 
         try:
